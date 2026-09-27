@@ -1,0 +1,13 @@
+[package]
+name = "polynomial"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+bon = "3.10.1"
+image = "0.25.10"
+jiff = "0.2.37"
+num-complex = "0.4.6"
+num-traits = "0.2.19"
+palette = "0.7.7"
+rayon = "1.12.0"
