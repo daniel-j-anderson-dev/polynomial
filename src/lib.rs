@@ -10,10 +10,10 @@ fn generate_image() {
 
     let image_width = 1000;
     let image_height = image_width;
-    let height = 5.0f32;
+    let height = 6.0f32;
     let width = height;
-    let center = Complex::ZERO;
-    // let center = Complex::new(-1.0, 0.0);
+    // let center = Complex::ZERO;
+    let center = Complex::new(0.051395, 0.0);
     let viewport = Viewport::builder() //
         .image_width(image_width)
         .image_height(image_height)
@@ -23,11 +23,11 @@ fn generate_image() {
         .build();
 
     fn f(z: Complex<f32>) -> Complex<f32> {
-        z.powu(2) - z - 2.0
+        z.powu(3) + z.powu(2) - z - 2.0
     }
 
     fn df_dz(z: Complex<f32>) -> Complex<f32> {
-        2.0 * z - 1.0
+        3.0 * z.powu(2) + 2.0 * z - 1.0
     }
 
     let generated_image = {
@@ -42,21 +42,20 @@ fn generate_image() {
                 let approximate_distance = fz.norm() / (df_dz(z).norm() + 1e-6);
                 let solution_threshold = 0.02;
                 let is_z_solution = (approximate_distance) <= solution_threshold;
-                
+
                 let color = if is_z_solution {
                     [0; 3]
                 } else {
                     color_domain::hsv_angle_norm_1(fz)
                 };
                 color.into()
-                // mandelbrot_grayscale(z, 1000).into()
             },
         )
     };
 
     let now = jiff::Zoned::now().strftime("%Y-%m-%d-%H-%M-%S").to_string();
     let prefix = "./out";
-    let path = format!("{prefix}/poly__{viewport}_{now}.png");
+    let path = format!("{prefix}/(x^3)+(x^2)-x-2_{viewport}_{now}.png");
 
     std::fs::create_dir_all(prefix).unwrap();
     generated_image.save(&path).unwrap();
