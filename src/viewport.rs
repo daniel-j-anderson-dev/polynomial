@@ -66,7 +66,8 @@ where
     pub fn pixel_to_complex(&self, row_index: u32, column_index: u32) -> Complex<N> {
         let pixel_index = Complex {
             re: N::from(column_index).unwrap(),
-            im: N::from(self.pixel_row_count - 1 - row_index).unwrap(),
+            // wrap the vertical index since viewport stores the bottom left not top right
+            im: N::from(self.pixel_row_count - 1 - row_index).unwrap(), 
         };
         let delta = pixel_index.elementwise_multiply(self.delta_pixel.clone());
         return self.bottom_left.clone() + delta;
